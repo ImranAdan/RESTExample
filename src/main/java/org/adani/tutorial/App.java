@@ -1,45 +1,55 @@
 package org.adani.tutorial;
 
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.adani.tutorial.example.ExampleTodoRESTTEndpoint;
-import org.apache.cxf.Bus;
-import org.apache.cxf.bus.spring.SpringBus;
-import org.apache.cxf.transport.servlet.CXFServlet;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.adani.tutorial.example.Todo;
+import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Simple CXF JAX-RS
- *
- *
- * JERSEY +  SPRING EXAMPLE
+ * Simple CXF JAX-RS Example
  *
  */
 
-@SpringBootApplication
-@Configuration(value = "app-context.xml")
-
+//@SpringBootApplication
+//@Configuration(value = "app-context.xml")
 public class App {
 
     public static void main(String... args){
-        SpringApplication.run(App.class, args);
+
+        
+    //    workingTemplateExample();
+        
+        JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
+
+        List<Object> endPointBeans = Arrays.asList(new ExampleTodoRESTTEndpoint());
+        sf.setServiceBeans(endPointBeans);
+
+        List<? extends Object> providers = Arrays.asList(new JacksonJaxbJsonProvider());
+        sf.setProviders(providers);
+
+        sf.setAddress("http://localhost:9000/");
+        sf.create();
     }
 
-    @Bean
-    public ServletRegistrationBean dispatchServlet(){
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new CXFServlet(), "/rest-api/*");
-        servletRegistrationBean.addUrlMappings("/example");
-        return servletRegistrationBean;
-    }
 
-    @Bean(name = Bus.DEFAULT_BUS_ID)
-    public SpringBus springBus(){
-        return new SpringBus();
+
+    private static void workingTemplateExample() {
+
+        String ep = "http://jsonplaceholder.typicode.com/todos";
+
+        final RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+
+        final Todo[] forObject = restTemplate.getForObject(ep, Todo[].class);
+        for(Todo t: forObject)
+            System.out.println(t.toString());
+
     }
 }

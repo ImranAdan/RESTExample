@@ -1,22 +1,28 @@
 package org.adani.tutorial.example;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Basic POJO represented
- * as the resource from the URI
- */
+ * as t
+ * */
+
+
 public class Todo {
 
-    private final long userId;
-    private final long id;
-    private final String title;
-    private final boolean completed;
+    @JsonProperty("userId")
+    private long userId;
 
-    public Todo(long userId, long id, String title, boolean completed) {
-        this.userId = userId;
-        this.id = id;
-        this.title = title;
-        this.completed = completed;
-    }
+    @JsonProperty("id")
+     long id;
+
+    @JsonProperty("title")
+      String title;
+
+    @JsonProperty("completed")
+    boolean completed;
+
+
 
     public long getUserId() {
         return userId;
@@ -32,5 +38,16 @@ public class Todo {
 
     public boolean isCompleted() {
         return completed;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "userId=" + userId +
+                ", id=" + id +
+                ", title='" + title + '\'' +
+                ", completed=" + completed +
+                '}';
     }
 }
