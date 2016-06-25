@@ -22,11 +22,8 @@ public class App {
 
     public static void main(String... args){
 
-        
-    //    workingTemplateExample();
-        
-        JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
 
+        JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
         List<Object> endPointBeans = Arrays.asList(new ExampleTodoRESTTEndpoint());
         sf.setServiceBeans(endPointBeans);
 

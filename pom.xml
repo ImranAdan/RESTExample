@@ -56,19 +56,19 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>3.1.6</version>
+            <version>3.1.4</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-transports</artifactId>
-            <version>3.1.6</version>
-        </dependency>
+            <version>3.1.4</version>
+            </dependency>
 
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-transports-http-jetty</artifactId>
-            <version>3.1.6</version>
+            <version>3.1.4</version>
         </dependency>
 
         <dependency>
