@@ -3,17 +3,16 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="httpMessageConvert" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
 
-    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
-        <property name="messageConverters">
+    <import resource="classpath:org/adani/example/todo/config.xml"/>
+
+
+    <bean id="serviceList" class="java.util.ArrayList">
+        <constructor-arg>
             <list>
-                <ref bean="httpMessageConvert"/>
+                <ref bean="TodoRestEndpoint"/>
             </list>
-        </property>
+        </constructor-arg>
     </bean>
-
-    <bean id="exampleTodoRESTManager" class="org.adani.tutorial.example.ExampleTodoRESTManager" autowire="byName"/>
-    <bean id="ExampleTodoRESTTEndpoint" class="org.adani.tutorial.example.ExampleTodoRESTTEndpoint" autowire="byName"/>
 
 </beans>

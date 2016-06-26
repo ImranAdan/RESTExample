@@ -22,7 +22,7 @@
 
     <jaxrs:server id="restServer" address="http://localhost:9000/">
         <jaxrs:serviceBeans>
-            <ref bean="ExampleTodoRESTTEndpoint"/>
+            <ref bean="serviceList"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
@@ -38,6 +38,6 @@
 
     <!-- Aspect J Proxy with Logging Aspect -->
     <aop:aspectj-autoproxy/>
-    <bean id="loggingAspect" class="org.adani.tutorial.utils.LoggingAspect"/>
+    <bean id="loggingAspect" class="org.adani.example.utils.LoggingAspect"/>
 
 </beans>

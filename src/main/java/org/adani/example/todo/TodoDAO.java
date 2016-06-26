@@ -1,4 +1,4 @@
-package org.adani.tutorial.example;
+package org.adani.example.todo;
 
 /**
  * The DAO responsible for
@@ -6,7 +6,7 @@ package org.adani.tutorial.example;
  * functions. e.g. Read from or write to
  * when required.
  */
-public class ExampleTodoDAO {
+public class TodoDAO {
 
 
 }

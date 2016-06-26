@@ -1,4 +1,4 @@
-package org.adani.tutorial.utils;
+package org.adani.example.utils;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -8,19 +8,29 @@ import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Logging aspect for when
+ * we are analysing functions
+ * <p>
+ * - OnEntry, OnExit and OnException being thrown
+ * this is very handy for debugging.
+ * <p>
+ * Please see tutorials on AOP and execution expressions
+ * for more details.
+ */
 @Aspect
 public class LoggingAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
 
-    @Before("execution(* org.adani.tutorial..*..*(..))")
+    @Before("execution(* org.adani.example..*..*(..))")
     protected void onEntry(JoinPoint jp) {
         String args = getJointPointArgs(jp);
         String actionMessage = "ENTER: [" + jp.getSignature().getDeclaringTypeName() + "::" + jp.getSignature().getName() + "( " + args + " )]";
         LOGGER.info(actionMessage);
     }
 
-    @After("execution(* org.adani.tutorial..*..*(..))")
+    @After("execution(* org.adani.example..*..*(..))")
     protected void onExit(JoinPoint jp) {
         String args = getJointPointArgs(jp);
         String actionMessage = "EXIT: [" + jp.getSignature().getDeclaringTypeName() + "::" + jp.getSignature().getName() + "( " + args + " )]";
@@ -28,12 +38,12 @@ public class LoggingAspect {
     }
 
 
-    @AfterThrowing(pointcut = ("execution(* org.adani.tutorial..*..*(..))"), throwing = "ex")
+    @AfterThrowing(pointcut = ("execution(* org.adani.example..*..*(..))"), throwing = "ex")
     protected void onExceptionThrown(JoinPoint jp, Throwable ex) {
         String fault = "EXCEPTION [\n" + ex.getMessage() + "\n]";
         LOGGER.info(fault);
         String args = getJointPointArgs(jp);
-        String actionMessage = fault + "\nEXIT: [" + jp.getSignature().getDeclaringTypeName() + "::" + jp.getSignature().getName() + "( " + args + " )]";
+        String actionMessage = fault + "\n" + "EXIT: [" + jp.getSignature().getDeclaringTypeName() + "::" + jp.getSignature().getName() + "( " + args + " )]";
         LOGGER.info(actionMessage);
     }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:cxf="http://cxf.apache.org/core"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://cxf.apache.org/jaxrs
@@ -17,14 +17,12 @@
     <import resource="domain-context.xml"/>
 
     <!-- JAXRS - Server Context -->
-    <import resource="classpath:META-INF/cxf/cxf.xml" />
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
     <bean id="jacksonJsonJAXBProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
 
     <jaxrs:server id="restServer" address="http://localhost:9000/">
         <jaxrs:serviceBeans>
-            <ref bean="ExampleTodoRESTTEndpoint"/>
+            <ref bean="serviceList"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
@@ -40,6 +38,6 @@
 
     <!-- Aspect J Proxy with Logging Aspect -->
     <aop:aspectj-autoproxy/>
-    <bean id="loggingAspect" class="org.adani.tutorial.utils.LoggingAspect"/>
+    <bean id="loggingAspect" class="org.adani.example.utils.LoggingAspect"/>
 
 </beans>
