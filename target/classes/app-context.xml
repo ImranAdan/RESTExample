@@ -1,30 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://cxf.apache.org/jaxrs
+       http://cxf.apache.org/schemas/jaxrs.xsd
+       http://cxf.apache.org/core
+       http://cxf.apache.org/schemas/core.xsd
+       http://www.springframework.org/schema/aop
+	   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
 
+    <!--Application Context -->
+    <import resource="domain-context.xml"/>
 
+    <!-- JAXRS - Server Context -->
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
+    <bean id="jacksonJsonJAXBProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
 
-    <!-- SPECIFY THE MESSAGE CONVERTER FOR THE TEMPLATE -->
-    <bean id="httpMessageConvert" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+    <jaxrs:server id="restServer" address="http://localhost:9000/">
+        <jaxrs:serviceBeans>
+            <ref bean="ExampleTodoRESTTEndpoint"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
+        </jaxrs:providers>
+        <jaxrs:features>
+            <cxf:logging/>
+        </jaxrs:features>
+        <jaxrs:extensionMappings>
+            <entry key="json" value="application/json"/>
+        </jaxrs:extensionMappings>
+    </jaxrs:server>
 
-    <!--SPRING REST_TEMPLATES -->
-    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
-        <property name="messageConverters">
-            <list>
-                <ref bean="httpMessageConvert"/>
-            </list>
-        </property>
-    </bean>
 
-    <bean id="exampleTodoRESTManager" class="org.adani.tutorial.example.ExampleTodoRESTManager" autowire="byName"/>
-
-    <bean id="ExampleTodoRESTTEndpoint" class="org.adani.tutorial.example.ExampleTodoRESTTEndpoint">
-        <property name="exampleTodoRESTManager" ref="exampleTodoRESTManager"/>
-    </bean>
-
+    <!-- Aspect J Proxy with Logging Aspect -->
+    <aop:aspectj-autoproxy/>
+    <bean id="loggingAspect" class="org.adani.tutorial.utils.LoggingAspect"/>
 
 </beans>

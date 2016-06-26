@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="true">
+    <contextName>ExampleRestService</contextName>
+
+    <!-- Specify Appenders Here -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout>
+            <Pattern>%date [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+        <target>System.out</target>
+    </appender>
+
+    <root>
+        <level value="info"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <!-- Apply DEBUG LEVEL Debuggin to the RestTemplate -->
+    <logger name="org.springframework.web.client.RestTemplate">
+        <level value="debug"/>
+    </logger>
+
+</configuration>

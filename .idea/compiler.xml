@@ -24,6 +24,13 @@
         <processorPath useClasspath="true" />
         <module name="rest-example" />
       </profile>
+      <profile default="false" name="Annotation profile for RESTExample" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="RESTExample" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="rest-example" target="1.8" />

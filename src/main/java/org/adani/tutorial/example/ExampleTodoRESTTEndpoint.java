@@ -4,13 +4,14 @@ package org.adani.tutorial.example;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-@Component
-@Path(value = "/example")
+@Service
+@Path("/example")
 @Consumes({"application/json"})
 @Produces({"application/json"})
 public class ExampleTodoRESTTEndpoint {
@@ -28,11 +29,11 @@ public class ExampleTodoRESTTEndpoint {
         return todo;
     }
 
-    @GET
-    public Response get(){
-        Response all = getAll();
-        return all;
-    }
+//    @GET
+//    public Response get(){
+//        Response all = getAll();
+//        return all;
+//    }
 
     @GET @Path("/todos")
     public Response getAll(){
