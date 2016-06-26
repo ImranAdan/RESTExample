@@ -10,19 +10,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Todo {
 
-    @JsonProperty("userId")
-    private long userId;
-
     @JsonProperty("id")
      long id;
-
     @JsonProperty("title")
       String title;
-
     @JsonProperty("completed")
     boolean completed;
-
-
+    @JsonProperty("userId")
+    private long userId;
 
     public long getUserId() {
         return userId;

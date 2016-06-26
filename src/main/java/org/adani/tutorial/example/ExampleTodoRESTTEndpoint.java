@@ -11,12 +11,15 @@ import javax.ws.rs.core.Response;
 
 @Component
 @Path(value = "/example")
-@Consumes({"application/json", "application/xml"})
-@Produces({"application/json", "application/xml"})
+@Consumes({"application/json"})
+@Produces({"application/json"})
 public class ExampleTodoRESTTEndpoint {
 
     private ExampleTodoRESTManager exampleTodoRESTManager;
 
+    public ExampleTodoRESTTEndpoint() {
+        exampleTodoRESTManager = new ExampleTodoRESTManager();
+    }
 
     @Transactional
     @POST @Path(value = "/todo")
@@ -27,13 +30,15 @@ public class ExampleTodoRESTTEndpoint {
 
     @GET
     public Response get(){
-        return getAll();
+        Response all = getAll();
+        return all;
     }
 
     @GET @Path("/todos")
     public Response getAll(){
-        final ResponseEntity<Todo> responseEntity = exampleTodoRESTManager.getAll();
-        return Response.status(responseEntity.getStatusCode().value()).entity(responseEntity).build();
+        final ResponseEntity<Todo[]> responseEntity = exampleTodoRESTManager.getAll();
+        Response response = Response.status(responseEntity.getStatusCode().value()).entity(responseEntity).build();
+        return response;
     }
 
     public void setExampleTodoRESTManager(ExampleTodoRESTManager exampleTodoRESTManager) {

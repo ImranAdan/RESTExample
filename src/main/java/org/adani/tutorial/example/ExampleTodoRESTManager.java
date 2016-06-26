@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
 
 public class ExampleTodoRESTManager {
@@ -33,10 +32,11 @@ public class ExampleTodoRESTManager {
         return restTemplate;
     }
 
-    public ResponseEntity<Todo> getAll() {
+    public ResponseEntity<Todo[]> getAll() {
         final String allToDos = "http://jsonplaceholder.typicode.com/todos";
-        RestTemplate restTemplate = new RestTemplate(Arrays.asList(new MappingJackson2HttpMessageConverter()));
-        final ResponseEntity<Todo> responseEntity = restTemplate.getForEntity(allToDos, Todo.class);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        final ResponseEntity<Todo[]> responseEntity = restTemplate.getForEntity(allToDos, Todo[].class);
         return responseEntity;
     }
 }
