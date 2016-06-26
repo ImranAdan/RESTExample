@@ -1,6 +1,5 @@
 package org.adani.example.todo;
 
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -8,9 +7,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 
 
+//TODO: Refactor this class
 public class TodoRESTManager {
 
-    private static final String serviceUrl = "http://jsonplaceholder.typicode.com/todo";
+    private static final String serviceUrl = "http://jsonplaceholder.typicode.com/todos";
 
     private final RestTemplate restTemplate;
 
@@ -18,7 +18,7 @@ public class TodoRESTManager {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<Todo> create(HttpEntity<Todo> item){
+    public ResponseEntity<Todo> create(Todo item) {
         ResponseEntity<Todo> response = restTemplate.postForEntity(serviceUrl, item, Todo.class);
         return response;
     }
@@ -39,7 +39,4 @@ public class TodoRESTManager {
         return responseEntity;
     }
 
-    public RestTemplate getRestTemplate() {
-        return restTemplate;
-    }
 }

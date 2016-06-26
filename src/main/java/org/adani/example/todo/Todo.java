@@ -1,54 +1,26 @@
 package org.adani.example.todo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
-/**
- * Basic POJO
- *
- * We apply annotations here so
- * that mappers can serialize between
- * raw JSON and the object.
- *
- * */
+/* Very Basic POJO: http://jsonplaceholder.typicode.com/todos/1 */
 public class Todo {
 
     @JsonProperty("id")
-     long id;
+    long id;
 
     @JsonProperty("title")
-      String title;
+    String title;
 
     @JsonProperty("completed")
     boolean completed;
 
     @JsonProperty("userId")
-    private long userId;
-
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
+    long userId;
 
     @Override
     public String toString() {
-        return "Todo{" +
-                "userId=" + userId +
-                ", id=" + id +
-                ", title='" + title + '\'' +
-                ", completed=" + completed +
-                '}';
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 }

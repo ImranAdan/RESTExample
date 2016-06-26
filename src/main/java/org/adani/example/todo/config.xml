@@ -14,6 +14,8 @@
     </bean>
 
 
+    <bean id="todoDAO" class="org.adani.example.todo.TodoDAO" autowire="byName"/>
+
     <bean id="todoRestManager" class="org.adani.example.todo.TodoRESTManager">
         <constructor-arg name="restTemplate" ref="restTemplate"/>
     </bean>

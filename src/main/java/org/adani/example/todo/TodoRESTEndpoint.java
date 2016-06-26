@@ -1,7 +1,6 @@
 package org.adani.example.todo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +17,18 @@ public class TodoRESTEndpoint {
 
     @Transactional
     @POST
-    @Path(value = "/todo")
-    public Response create(HttpEntity<Todo> item) {
+    @Path(value = "/todos")
+    public Response create(Todo item) {
         ResponseEntity<Todo> todo = todoRestManager.create(item);
         return asResponse(todo);
+    }
+
+
+    @GET
+    @Path("/todos")
+    public Response getAll() {
+        final ResponseEntity<Todo[]> entity = todoRestManager.getAll();
+        return asResponse(entity);
     }
 
     @GET
@@ -31,20 +38,8 @@ public class TodoRESTEndpoint {
         return asResponse(entity);
     }
 
-    @GET
-    @Path("/todos")
-    public Response getAll() {
-        final ResponseEntity<Todo[]> entity = todoRestManager.getAll();
-        return asResponse(entity);
-
-    }
-
     private <T> Response asResponse(ResponseEntity<T> entity) {
         return Response.status(entity.getStatusCode().value()).entity(entity).build();
-    }
-
-    public TodoRESTManager getTodoRestManager() {
-        return todoRestManager;
     }
 
     public void setTodoRestManager(TodoRESTManager todoRestManager) {
