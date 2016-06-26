@@ -1,22 +1,20 @@
 package org.adani.tutorial.example;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-@Service
 @Path("/example")
 @Consumes({"application/json"})
 @Produces({"application/json"})
 public class ExampleTodoRESTTEndpoint {
 
-    private ExampleTodoRESTManager exampleTodoRESTManager;
+    @Autowired
+    ExampleTodoRESTManager exampleTodoRESTManager;
 
     public ExampleTodoRESTTEndpoint() {
         exampleTodoRESTManager = new ExampleTodoRESTManager();
@@ -29,20 +27,10 @@ public class ExampleTodoRESTTEndpoint {
         return todo;
     }
 
-//    @GET
-//    public Response get(){
-//        Response all = getAll();
-//        return all;
-//    }
-
     @GET @Path("/todos")
     public Response getAll(){
         final ResponseEntity<Todo[]> responseEntity = exampleTodoRESTManager.getAll();
         Response response = Response.status(responseEntity.getStatusCode().value()).entity(responseEntity).build();
         return response;
-    }
-
-    public void setExampleTodoRESTManager(ExampleTodoRESTManager exampleTodoRESTManager) {
-        this.exampleTodoRESTManager = exampleTodoRESTManager;
     }
 }
