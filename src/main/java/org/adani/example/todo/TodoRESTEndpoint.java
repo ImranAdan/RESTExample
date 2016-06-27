@@ -23,7 +23,6 @@ public class TodoRESTEndpoint {
         return asResponse(todo);
     }
 
-
     @GET
     @Path("/todos")
     public Response getAll() {
@@ -33,7 +32,7 @@ public class TodoRESTEndpoint {
 
     @GET
     @Path("/todos/{id}")
-    public Response getTodoById(@PathParam("id") long id) {
+    public Response getTodoByKey(@PathParam("id") long id) {
         final ResponseEntity<Todo> entity = todoRestManager.getById(id);
         return asResponse(entity);
     }
