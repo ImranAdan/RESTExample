@@ -4,23 +4,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 
 public class TodoRestClient {
 
-    @Resource(name = "externalServiceUrl")
-    String serviceUrl;
+    private final String serviceUrl;
 
     @Autowired
     private RestTemplate restTemplate;
+
+    public TodoRestClient(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
+    }
 
     public ResponseEntity<Todo> getById(long id) {
         ResponseEntity<Todo> todoById = getTodoById(id);
         return todoById;
     }
 
-    // Apply paging for large resultset
+    // Apply paging for large result set
     public ResponseEntity<Todo[]> getAll() {
         ResponseEntity<Todo[]> allTodos = all();
         return allTodos;

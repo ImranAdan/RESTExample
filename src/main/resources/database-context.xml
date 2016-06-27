@@ -10,8 +10,8 @@
     </bean>
 
 
-    <bean id="externalServiceUrl" class="java.lang.String">
-        <constructor-arg value="${external.service}"/>
+    <bean id="cacheRefreshRate" class="java.lang.Long">
+        <constructor-arg index="0" value="${refresh}"/>
     </bean>
 
     <jdbc:embedded-database id="testdb" type="H2">

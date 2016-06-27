@@ -2,7 +2,6 @@ package org.adani.example.todo;
 
 import com.google.gson.Gson;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,6 @@ public class TodoRESTEndpointTest {
 
     private Todo todoItem;
 
-    /** http://jsonplaceholder.typicode.com/todos/3 **/
 
     @Before
     public void setUp() {
@@ -47,8 +45,15 @@ public class TodoRESTEndpointTest {
     }
 
     @Test
+    public void testCreate() throws Exception {
+        final Response response = ep.postToDo(todoItem);
+        assertThat(response.getStatus(), anyOf(equalTo(200), equalTo(201)));
+    }
+
+    @Test
     public void testGetTodoById() {
-        final Response response = ep.getTodoByKey(4);
+        final Response response = ep.getById(4);
+
         assertThat(response.getStatus(), anyOf(equalTo(200), equalTo(201)));
     }
 
@@ -57,16 +62,4 @@ public class TodoRESTEndpointTest {
         final Response response = ep.getAll();
         assertThat(response.getStatus(), anyOf(equalTo(200), equalTo(201)));
     }
-
-    /**
-     * TEST POST REQUESTS FOR OUR EP!
-     *
-     * @throws Exception
-     */
-    @Ignore
-    @Test
-    public void testCreate() throws Exception {
-        //final Response response = ep.create(todoItem);
-        //assertThat(response.getStatus(), anyOf(equalTo(200), equalTo(201)));
-     }
 }

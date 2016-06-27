@@ -10,12 +10,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Basic test of our JDBC backed DAO.
@@ -40,9 +38,7 @@ public class TodoDAOTest {
         todo.setCreated(new Timestamp(Calendar.getInstance().getTime().getTime()));
 
         Todo record = todoDAO.create(todo);
-
         assertThat(record, is(not(nullValue())));
-        assertTrue(todoDAO.getCache().containsKey(record.getId()));
     }
 
     @Test
@@ -52,7 +48,6 @@ public class TodoDAOTest {
         todo.setCreated(new Timestamp(Calendar.getInstance().getTime().getTime()));
 
         Todo record = todoDAO.create(todo);
-
         assertThat(record, is(not(nullValue())));
 
         Todo fetched = todoDAO.fetch(record);
@@ -74,16 +69,16 @@ public class TodoDAOTest {
 
         Todo updated = todoDAO.update(createdRecordForUpdate);
         assertThat(updated.getTitle(), is(newTitle));
-        assertThat(todoDAO.getCache().get(updated.getId()), is(equalTo(updated)));
     }
 
-    @Test
+    @Test(expected = Exception.class)
     public void testDelete() throws Exception {
-        // CREATE RECORD, THEN DELETE IT
+        // CREATE RECORD, THEN DELETE IT, THEN TRY TO FETCH SHOULD FAIL!
         Todo todo = new Gson().fromJson("{\"id\": 4, \"title\": \"fugiat veniam minus\", \"completed\": false, \"userId\": 1}", Todo.class);
         todo.setCreated(new Timestamp(Calendar.getInstance().getTime().getTime()));
 
         todoDAO.delete(todo);
-        assertTrue(!todoDAO.getCache().containsKey(todo.getId()));
+
+        todoDAO.fetch(todo);
     }
 }

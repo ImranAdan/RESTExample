@@ -29,7 +29,6 @@ public class Todo {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof Todo)) return false;

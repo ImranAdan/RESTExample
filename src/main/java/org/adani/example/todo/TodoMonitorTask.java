@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
+
 /**
  * TODO: Investigate issues on implementing runnable
  * <p>
@@ -21,6 +23,9 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
     @Autowired
     private TodoCacheManager todoCacheManager;
 
+    @Resource(name = "cacheRefreshRate")
+    private Long cacheRefreshRate;
+
     public TodoMonitorTask(boolean shouldStart) {
         this.monitoring = shouldStart;
     }
@@ -29,9 +34,11 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
     public void run() {
         while (monitoring) {
             try {
-                Thread.sleep(600000); // Sleep for 10 Minutes before applying a cache refresh << tweak this for a refresh rate {}
-                //todoCacheManager.invalidated();
-                LOGGER.info("APPLIED REFRESH!!");
+
+                /* Sleep for 10 Minutes before applying a cache refresh */
+                Thread.sleep(cacheRefreshRate);
+                todoCacheManager.invalidated();
+
             } catch (InterruptedException e) {
                 LOGGER.error("ERROR", e);
                 throw new RuntimeException(e);

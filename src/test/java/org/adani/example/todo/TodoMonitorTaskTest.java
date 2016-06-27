@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 public class TodoMonitorTaskTest {
 
 
-    @Test // Basic test To see the thread running
+    @Test // Basic test To see the thread starting and running
     public void testMonitoringThread() throws Exception {
         Executor e = Executors.newSingleThreadExecutor();
         e.execute(new TodoMonitorTask(true));
