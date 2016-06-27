@@ -16,11 +16,10 @@
     <!--Domain Context -->
     <import resource="domain-context.xml"/>
 
-
     <!-- Database Context -->
     <import resource="database-context.xml"/>
 
-
+    <!-- COULD EVEN TAKE THIS OUT into a server-context.xml for finer control -->
     <!-- CXF- JAXRS - Server Context [Local Host] -->
     <bean id="jacksonJsonJAXBProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
 

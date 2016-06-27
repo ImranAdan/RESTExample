@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:app-context.xml")
+@ContextConfiguration(locations = "classpath:application-context.xml")
 public class TodoDAOTest {
 
     @Autowired

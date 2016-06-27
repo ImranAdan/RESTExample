@@ -22,7 +22,7 @@ public class Application {
          * The following application context will setup
          * a JAXRS Server and add the TODORestEndpoint
          */
-        new ClassPathXmlApplicationContext("app-context.xml");
+        new ClassPathXmlApplicationContext("application-context.xml");
     }
 
 }

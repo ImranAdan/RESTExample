@@ -108,7 +108,14 @@ public class TodoDAO {
     }
 
     private RowMapper<Todo> getMapper() {
-        return (resultSet, i) -> new Todo(resultSet.getInt("todo_user_id"), resultSet.getInt("todo_id"),
-                resultSet.getString("todo_title"), resultSet.getBoolean("todo_completed"), resultSet.getTimestamp("todo_created"));
+        return (resultSet, i) -> {
+            Todo d = new Todo();
+            d.userId = resultSet.getInt("todo_user_id");
+            d.id = resultSet.getInt("todo_id");
+            d.title = resultSet.getString("todo_title");
+            d.completed = resultSet.getBoolean("todo_completed");
+            d.created = resultSet.getTimestamp("todo_created");
+            return d;
+        };
     }
 }

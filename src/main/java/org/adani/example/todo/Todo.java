@@ -26,14 +26,6 @@ public class Todo {
 
     Timestamp created; // for cache invalidation
 
-    public Todo(long user_id, long id, String title, boolean completed, Timestamp created) {
-        this.userId = user_id;
-        this.id = id;
-        this.title = title;
-        this.completed = completed;
-        this.created = created;
-    }
-
     @Override
     public String toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE);
