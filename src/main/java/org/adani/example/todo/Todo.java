@@ -8,7 +8,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.sql.Timestamp;
 
-/* Very Basic POJO: http://jsonplaceholder.typicode.com/todos/1 */
 public class Todo {
 
     @JsonProperty("userId")
@@ -23,7 +22,7 @@ public class Todo {
     @JsonProperty("completed")
     boolean completed;
 
-    Timestamp created; // for cache invalidation
+    Timestamp created;
 
     @Override
     public String toString() {

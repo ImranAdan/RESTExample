@@ -9,15 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Logging aspect for when
- * we are analysing functions
- * <p>
- * - OnEntry, OnExit and OnException being thrown
- * this is very handy for debugging.
- * <p>
- * Please see tutorials on AOP and execution expressions
- * for more details.
- */
+ * AOP style Method level Logging
+ **/
 @Aspect
 public class LoggingAspect {
 
@@ -49,11 +42,11 @@ public class LoggingAspect {
 
 
     private String getJointPointArgs(JoinPoint jp) {
-        String args = "[";
+        String args = "";
         for (Object o: jp.getArgs())
             args += o.toString() + ", ";
 
-        return args.length() > 1 ? args.substring(0, args.length() - 2) + "]" : "]";
+        return args.length() > 1 ? "[" + args.substring(0, args.length() - 2) + "]".trim() : "[]";
     }
 
 }

@@ -3,14 +3,19 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- ADD config.xml files from other as shown below, these are necessary to find endpoint beans-->
+    <!-- EXAMPLE!
+        <import resource="classpath:org/adani/example/myOtherPacgake/config.xml"/>
+     -->
 
     <import resource="classpath:org/adani/example/todo/config.xml"/>
 
-
+    <!-- Add additional service endpoints here, these will be autowired into our JAX-RS server, see application-context.xml -->
     <bean id="serviceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
                 <ref bean="TodoRestEndpoint"/>
+                <!-- <ref bean="MyOtherServiceFrom"/> -->
             </list>
         </constructor-arg>
     </bean>

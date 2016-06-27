@@ -18,6 +18,14 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Testing our JDBC backed DAO.
+ * We test the standard CRUD operations
+ * <p>
+ * CREATE, READ, UPDATE, DELETE
+ * <p>
+ * create(),fetch(),update(),delete()
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:application-context.xml")
 public class TodoDAOTest {

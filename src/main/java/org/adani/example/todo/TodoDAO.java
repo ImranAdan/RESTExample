@@ -18,7 +18,7 @@ public class TodoDAO {
 
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TodoDAO.class);
 
-    private static final long CACHE_REFRESH_RATE = 600000L; // Refresh the cache every 10 minutes for example
+    private static final long CACHE_REFRESH_RATE = 600000L; // For Cache Invalidation
     private final Map<Long, Todo> cache;
 
     @Autowired
@@ -28,20 +28,28 @@ public class TodoDAO {
         cache = new HashMap<>();
     }
 
-    public Todo fetch(Todo todo) {
+    public Todo fetchWithId(long id) {
+        return new JdbcTemplate(dataSource).queryForObject("SELECT * FROM PUBLIC.TODO WHERE todo_id = ?", new Object[]{id}, getRowMapper());
+    }
 
-        if (cache.containsKey(todo.id) && !expired(todo)) {
-            return cache.get(todo.id);
-        }
+    public Todo fetch(Todo item) {
 
+        if (!expired(item))
+            return cache.get(item.id);
+
+        Todo cachedEntry = cacheEntry(item);
+        return cachedEntry;
+    }
+
+    private Todo cacheEntry(Todo todo) {
         Todo record = fetchWithId(todo.id);
-        cache.put(record.id, record);
-        return cache.get(record.id);
+        Todo previous = cache.put(record.id, record);
+        Todo current = cache.get(record.id);
+        LOGGER.info("REMOVED: " + previous);
+        LOGGER.info("ADDED: " + current);
+        return current;
     }
 
-    private Todo fetchWithId(long id) {
-        return new JdbcTemplate(dataSource).queryForObject("SELECT * FROM PUBLIC.TODO WHERE todo_id = ?", new Object[]{id}, getMapper());
-    }
 
     @Transactional
     public Todo create(Todo todo) {
@@ -50,10 +58,9 @@ public class TodoDAO {
     }
 
     private Todo insert(Todo todo) {
-        final String sql = "INSERT INTO PUBLIC.TODO (todo_user_id, todo_id, todo_title, todo_completed) VALUES (?,?,?,?)";  //SQL
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = "INSERT INTO PUBLIC.TODO (todo_user_id, todo_id, todo_title, todo_completed) VALUES (?,?,?,?)";
 
-        //BEGIN INSERT OPERATION
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         int updated = new JdbcTemplate(dataSource).update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setLong(1, todo.userId);
@@ -64,33 +71,32 @@ public class TodoDAO {
         }, keyHolder);
 
         LOGGER.info("INSERTION COMPLETE: CREATED " + updated + " ROWS");
-        Todo record = fetchWithId(todo.id);
-        cache.put(record.id, record);
-        return cache.get(record.id);
+
+        Todo cachedEntry = cacheEntry(todo);
+        return cachedEntry;
     }
 
     private boolean expired(Todo todo) {
-        final long timeInCache = System.currentTimeMillis() - todo.created.getTime();
-        return timeInCache > CACHE_REFRESH_RATE;
+        long timeInCache = System.currentTimeMillis() - todo.created.getTime();
+        return cache.containsKey(todo.id) && timeInCache > CACHE_REFRESH_RATE;
     }
 
     @Transactional
     public Todo update(Todo todo) {
-        final String sql = "UPDATE PUBLIC.TODO SET (todo_user_id, todo_id, todo_title, todo_completed) = (?,?,?,?) WHERE todo_id = ?";//SQL
-        final int updatedRows = new JdbcTemplate(dataSource).update(sql, new Object[]{todo.userId, todo.id, todo.title, todo.completed, todo.id});
+        String sql = "UPDATE PUBLIC.TODO SET (todo_user_id, todo_id, todo_title, todo_completed) = (?,?,?,?) WHERE todo_id = ?";//SQL
+
+        int updatedRows = new JdbcTemplate(dataSource).update(sql, new Object[]{todo.userId, todo.id, todo.title, todo.completed, todo.id});
         LOGGER.info("UPDATE COMPLETE: AFFECTED " + updatedRows + " ROWS");
 
-        Todo record = fetchWithId(todo.id);
-
-        cache.put(record.id, record);
-        return cache.get(record.id);
+        Todo cachedEntry = cacheEntry(todo);
+        return cachedEntry;
     }
 
 
     @Transactional
     public void delete(Todo todo) {
 
-        final String sql = "DELETE FROM PUBLIC.TODO WHERE id = ?";
+        String sql = "DELETE FROM PUBLIC.TODO WHERE id = ?";
         int affected = new JdbcTemplate(dataSource).update(sql, new Object[]{todo.id});
         LOGGER.info("DELETED COMPLETE: AFFECTED " + affected + " ROWS", todo);
 
@@ -98,12 +104,11 @@ public class TodoDAO {
             cache.remove(todo.id);
     }
 
-
     public Map<Long, Todo> getCache() {
         return cache;
     }
 
-    private RowMapper<Todo> getMapper() {
+    private RowMapper<Todo> getRowMapper() {
         return (resultSet, i) -> {
             Todo d = new Todo();
             d.userId = resultSet.getInt("todo_user_id");

@@ -13,14 +13,20 @@
        http://www.springframework.org/schema/aop
 	   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
 
+    <!-- Property Place Holders -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:app.properties"/>
+    </bean>
+
     <!--Domain Context -->
-    <import resource="domain-context.xml"/>
+    <import resource="service-context.xml"/>
 
     <!-- Database Context -->
     <import resource="database-context.xml"/>
 
+
     <!-- COULD EVEN TAKE THIS OUT into a server-context.xml for finer control -->
-    <!-- CXF- JAXRS - Server Context [Local Host] -->
+    <!-- CXF- JAXRS - Server Context [localhost] -->
     <bean id="jacksonJsonJAXBProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
 
     <jaxrs:server id="restServer" address="http://localhost:9000/">

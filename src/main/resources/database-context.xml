@@ -10,6 +10,10 @@
     </bean>
 
 
+    <bean id="serviceUrl" class="java.lang.String">
+        <constructor-arg value="${external.service}"/>
+    </bean>
+
     <jdbc:embedded-database id="testdb" type="H2">
         <jdbc:script location="classpath:sql/init.sql"/>
     </jdbc:embedded-database>
@@ -23,6 +27,5 @@
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
 
 </beans>

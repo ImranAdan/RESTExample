@@ -15,13 +15,7 @@ public class Application {
     private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     public static void main(String... args){
-        LOGGER.info("STARTING JAXRS SERVER THROUGH APPLICATION CONTEXT: SPRING!");
-
-
-        /**
-         * The following application context will setup
-         * a JAXRS Server and add the TODORestEndpoint
-         */
+        LOGGER.info("STARTING JAX-RS SERVER THROUGH APPLICATION CONTEXT: SPRING!");
         new ClassPathXmlApplicationContext("application-context.xml");
     }
 
