@@ -3,50 +3,30 @@ package org.adani.example.todo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
-import java.util.Collections;
-
+/**
+ * TODO: Investigate issues on implementing runnable
+ * <p>
+ * Caused by: java.lang.IllegalStateException: Cannot convert value of type [com.sun.proxy.$Proxy27 implementing java.lang.Runnable,java.lang.AutoCloseable,org.springframework.aop.SpringProxy,org.springframework.aop.framework.Advised] to required type [org.adani.example.todo.TodoMonitorTask] for property 'todoMonitorTask': no matching editors or conversion strategy found
+ * at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:302)
+ * at org.springframework.beans.AbstractNestablePropertyAccessor.convertIfNecessary(AbstractNestablePropertyAccessor.java:576)
+ * ... 43 common frames omitted18:12:40.155 [main] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - After test class: context [DefaultTestContext@4ddced80 testClass = TodoDAOTest, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [MergedContextConfiguration@1534f01b testClass = TodoDAOTest, locations = '{classpath:application-context.xml}', classes = '{}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{}', contextLoader = 'org.springframework.test.context.support.DelegatingSmartContextLoader', parent = [null]]], class annotated with @DirtiesContext [false] with mode [null].
+ */
 public class TodoMonitorTask implements Runnable, AutoCloseable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TodoMonitorTask.class);
 
-    @Resource(name = "serviceUrl")
-    String serviceUrl;
+    private volatile boolean monitoring;
 
     @Autowired
-    private TodoDAO todoDAO;
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    private volatile boolean polling;
-
-    public ResponseEntity<Todo> create(Todo item) {
-        ResponseEntity<Todo> response = restTemplate.postForEntity(serviceUrl, item, Todo.class);
-        return response;
-    }
-
-    public ResponseEntity<Todo> getById(long id) {
-        ResponseEntity<Todo> entity = restTemplate.getForEntity(serviceUrl + "/" + id, Todo.class, Collections.singletonMap("id", id));
-        return entity;
-    }
-
-    public ResponseEntity<Todo[]> getAll() {
-        final ResponseEntity<Todo[]> responseEntity = restTemplate.getForEntity(serviceUrl, Todo[].class);
-        return responseEntity;
-    }
-
+    private TodoCacheManager todoCacheManager;
 
     @Override
     public void run() {
-        while (polling) {
+        while (monitoring) {
             try {
-                Thread.sleep(120000L); // Sleep for 15 Minutes before polling for next result
-
-
+                Thread.sleep(120000L); // Sleep for 15 Minutes before applying a cache refresh << tweak this for a refresh rate
+                todoCacheManager.invalidated();
             } catch (InterruptedException e) {
                 LOGGER.error("ERROR", e);
                 throw new RuntimeException(e);
@@ -54,21 +34,17 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
         }
     }
 
-    public void setPolling(boolean polling) {
-        this.polling = polling;
+    public void setMonitoring(boolean monitoring) {
+        this.monitoring = monitoring;
     }
 
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    public void setTodoDAO(TodoDAO todoDAO) {
-        this.todoDAO = todoDAO;
+    public void setTodoCacheManager(TodoCacheManager todoCacheManager) {
+        this.todoCacheManager = todoCacheManager;
     }
 
     @Override
     public void close() throws Exception {
-        LOGGER.info("Ending Monitoring thread....");
-        this.polling = false;
+        LOGGER.info("Ending Monitoring....");
+        setMonitoring(false);
     }
 }

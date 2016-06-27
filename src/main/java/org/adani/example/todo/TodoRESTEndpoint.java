@@ -12,28 +12,19 @@ import javax.ws.rs.core.Response;
 public class TodoRESTEndpoint {
 
     @Autowired
-    TodoManager todoManager;
-
-
-    @POST
-    @Path("/todos")
-    public Response create(Todo item) {
-        ResponseEntity<Todo> todo = todoManager.create(item);
-        return asResponse(todo);
-    }
-
+    TodoCacheManager todoCacheManager;
 
     @GET
     @Path("/todos/{id}")
     public Response getTodoByKey(@PathParam("id") long id) {
-        final ResponseEntity<Todo> entity = todoManager.getById(id);
+        final ResponseEntity<Todo> entity = todoCacheManager.getById(id);
         return asResponse(entity);
     }
 
     @GET
     @Path("/todos")
     public Response getAll() {
-        final ResponseEntity<Todo[]> entity = todoManager.getAll();
+        final ResponseEntity<Todo[]> entity = todoCacheManager.getAll();
         return asResponse(entity);
     }
 
@@ -42,11 +33,17 @@ public class TodoRESTEndpoint {
     }
 
     public void initialiseService() {
-        todoManager.monitor();
+        todoCacheManager.monitor();
     }
 
-    public void setTodoManager(TodoManager todoManager) {
-        this.todoManager = todoManager;
+    public void setTodoCacheManager(TodoCacheManager todoCacheManager) {
+        this.todoCacheManager = todoCacheManager;
     }
 
+    @POST
+    @Path("/todos") //POST EXAMPLE
+    public Response create(Todo item) {
+        ResponseEntity<Todo> todo = todoCacheManager.create(item);
+        return asResponse(todo);
+    }
 }

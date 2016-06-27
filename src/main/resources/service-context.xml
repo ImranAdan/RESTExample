@@ -15,7 +15,6 @@
         <constructor-arg>
             <list>
                 <ref bean="TodoRestEndpoint"/>
-                <!-- <ref bean="MyOtherServiceFrom"/> -->
             </list>
         </constructor-arg>
     </bean>

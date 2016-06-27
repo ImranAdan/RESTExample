@@ -11,18 +11,18 @@ import java.sql.Timestamp;
 public class Todo {
 
     @JsonProperty("userId")
-    long userId;
+    private long userId;
 
     @JsonProperty("id")
-    long id;
+    private long id;
 
     @JsonProperty("title")
-    String title;
+    private String title;
 
     @JsonProperty("completed")
-    boolean completed;
+    private boolean completed;
 
-    Timestamp created;
+    private Timestamp created;
 
     @Override
     public String toString() {
@@ -40,5 +40,45 @@ public class Todo {
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(created).toHashCode();
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

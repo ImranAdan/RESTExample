@@ -5,7 +5,6 @@
 
 
     <bean id="httpMessageConvert" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
         <property name="messageConverters">
             <list>
@@ -14,14 +13,20 @@
         </property>
     </bean>
 
+    <bean id="restClient" class="org.adani.example.todo.TodoRestClient">
+        <property name="restTemplate" ref="restTemplate"/>
+    </bean>
+
+
     <bean id="todoDAO" class="org.adani.example.todo.TodoDAO"/>
 
-    <bean id="todoRestManager" class="org.adani.example.todo.TodoManager">
-        <property name="restTemplate" ref="restTemplate"/>
+    <bean id="todoCacheManager" class="org.adani.example.todo.TodoCacheManager">
+        <property name="restClient" ref="restClient"/>
         <property name="todoDAO" ref="todoDAO"/>
     </bean>
 
     <bean id="TodoRestEndpoint" class="org.adani.example.todo.TodoRESTEndpoint" init-method="initialiseService">
-        <property name="todoManager" ref="todoRestManager"/>
+        <property name="todoCacheManager" ref="todoCacheManager"/>
     </bean>
+
 </beans>

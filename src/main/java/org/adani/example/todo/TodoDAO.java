@@ -17,7 +17,6 @@ import java.util.Map;
 public class TodoDAO {
 
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TodoDAO.class);
-
     private static final long CACHE_REFRESH_RATE = 600000L; // For Cache Invalidation
     private final Map<Long, Todo> cache;
 
@@ -35,16 +34,16 @@ public class TodoDAO {
     public Todo fetch(Todo item) {
 
         if (!expired(item))
-            return cache.get(item.id);
+            return cache.get(item.getId());
 
         Todo cachedEntry = cacheEntry(item);
         return cachedEntry;
     }
 
     private Todo cacheEntry(Todo todo) {
-        Todo record = fetchWithId(todo.id);
-        Todo previous = cache.put(record.id, record);
-        Todo current = cache.get(record.id);
+        Todo record = fetchWithId(todo.getId());
+        Todo previous = cache.put(record.getId(), record);
+        Todo current = cache.get(record.getId());
         LOGGER.info("REMOVED: " + previous);
         LOGGER.info("ADDED: " + current);
         return current;
@@ -63,10 +62,10 @@ public class TodoDAO {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int updated = new JdbcTemplate(dataSource).update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setLong(1, todo.userId);
-            ps.setLong(2, todo.id);
-            ps.setString(3, todo.title);
-            ps.setBoolean(4, todo.completed);
+            ps.setLong(1, todo.getUserId());
+            ps.setLong(2, todo.getId());
+            ps.setString(3, todo.getTitle());
+            ps.setBoolean(4, todo.isCompleted());
             return ps;
         }, keyHolder);
 
@@ -77,15 +76,15 @@ public class TodoDAO {
     }
 
     private boolean expired(Todo todo) {
-        long timeInCache = System.currentTimeMillis() - todo.created.getTime();
-        return cache.containsKey(todo.id) && timeInCache > CACHE_REFRESH_RATE;
+        long timeInCache = System.currentTimeMillis() - todo.getCreated().getTime();
+        return cache.containsKey(todo.getId()) && timeInCache > CACHE_REFRESH_RATE;
     }
 
     @Transactional
     public Todo update(Todo todo) {
         String sql = "UPDATE PUBLIC.TODO SET (todo_user_id, todo_id, todo_title, todo_completed) = (?,?,?,?) WHERE todo_id = ?";//SQL
 
-        int updatedRows = new JdbcTemplate(dataSource).update(sql, new Object[]{todo.userId, todo.id, todo.title, todo.completed, todo.id});
+        int updatedRows = new JdbcTemplate(dataSource).update(sql, new Object[]{todo.getUserId(), todo.getId(), todo.getTitle(), todo.isCompleted(), todo.getId()});
         LOGGER.info("UPDATE COMPLETE: AFFECTED " + updatedRows + " ROWS");
 
         Todo cachedEntry = cacheEntry(todo);
@@ -97,11 +96,11 @@ public class TodoDAO {
     public void delete(Todo todo) {
 
         String sql = "DELETE FROM PUBLIC.TODO WHERE id = ?";
-        int affected = new JdbcTemplate(dataSource).update(sql, new Object[]{todo.id});
+        int affected = new JdbcTemplate(dataSource).update(sql, new Object[]{todo.getId()});
         LOGGER.info("DELETED COMPLETE: AFFECTED " + affected + " ROWS", todo);
 
-        if (cache.containsKey(todo.id))
-            cache.remove(todo.id);
+        if (cache.containsKey(todo.getId()))
+            cache.remove(todo.getId());
     }
 
     public Map<Long, Todo> getCache() {
@@ -111,12 +110,19 @@ public class TodoDAO {
     private RowMapper<Todo> getRowMapper() {
         return (resultSet, i) -> {
             Todo d = new Todo();
-            d.userId = resultSet.getInt("todo_user_id");
-            d.id = resultSet.getInt("todo_id");
-            d.title = resultSet.getString("todo_title");
-            d.completed = resultSet.getBoolean("todo_completed");
-            d.created = resultSet.getTimestamp("todo_created");
+            d.setUserId(resultSet.getInt("todo_user_id"));
+            d.setId(resultSet.getInt("todo_id"));
+            d.setTitle(resultSet.getString("todo_title"));
+            d.setCompleted(resultSet.getBoolean("todo_completed"));
+            d.setCreated(resultSet.getTimestamp("todo_created"));
             return d;
         };
+    }
+
+    public void refreshCache() {
+        cache.values().stream().filter(toRefresh -> expired(toRefresh)).forEach(toRefresh -> {
+            Todo refreshedEntity = cacheEntry(toRefresh);
+            LOGGER.info("APPLIED REFRESH ON:\n" + refreshedEntity.toString());
+        });
     }
 }

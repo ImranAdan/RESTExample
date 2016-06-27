@@ -10,7 +10,7 @@
     </bean>
 
 
-    <bean id="serviceUrl" class="java.lang.String">
+    <bean id="externalServiceUrl" class="java.lang.String">
         <constructor-arg value="${external.service}"/>
     </bean>
 
