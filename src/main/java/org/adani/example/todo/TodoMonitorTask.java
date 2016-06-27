@@ -21,12 +21,17 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
     @Autowired
     private TodoCacheManager todoCacheManager;
 
+    public TodoMonitorTask(boolean shouldStart) {
+        this.monitoring = shouldStart;
+    }
+
     @Override
     public void run() {
         while (monitoring) {
             try {
-                Thread.sleep(120000L); // Sleep for 15 Minutes before applying a cache refresh << tweak this for a refresh rate
-                todoCacheManager.invalidated();
+                Thread.sleep(600000); // Sleep for 10 Minutes before applying a cache refresh << tweak this for a refresh rate {}
+                //todoCacheManager.invalidated();
+                LOGGER.info("APPLIED REFRESH!!");
             } catch (InterruptedException e) {
                 LOGGER.error("ERROR", e);
                 throw new RuntimeException(e);
@@ -36,10 +41,6 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
 
     public void setMonitoring(boolean monitoring) {
         this.monitoring = monitoring;
-    }
-
-    public void setTodoCacheManager(TodoCacheManager todoCacheManager) {
-        this.todoCacheManager = todoCacheManager;
     }
 
     @Override

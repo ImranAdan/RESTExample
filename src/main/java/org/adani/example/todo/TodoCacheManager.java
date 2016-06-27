@@ -20,7 +20,7 @@ public class TodoCacheManager {
     private TodoDAO todoDAO;
 
     TodoCacheManager() {
-        todoMonitorTask = new TodoMonitorTask();
+        todoMonitorTask = new TodoMonitorTask(true);
         executor = Executors.newSingleThreadExecutor();
     }
 
