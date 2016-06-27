@@ -23,7 +23,6 @@ public class Todo {
     @JsonProperty("completed")
     boolean completed;
 
-
     Timestamp created; // for cache invalidation
 
     @Override
@@ -34,16 +33,9 @@ public class Todo {
 
     @Override
     public boolean equals(Object obj) {
-
-        if ((obj == null) || !(obj instanceof Todo))
-            return false;
-
+        if ((obj == null) || !(obj instanceof Todo)) return false;
         final Todo other = (Todo) obj;
-
-        return new EqualsBuilder()
-                .append(id, other.id)
-                .append(created, other.created)
-                .isEquals();
+        return new EqualsBuilder().append(id, other.id).append(created, other.created).isEquals();
     }
 
     @Override

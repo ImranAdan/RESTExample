@@ -20,4 +20,8 @@
         <level value="debug"/>
     </logger>
 
+    <logger name="org.springframework.jdbc.core.JdbcTemplate">
+        <level value="debug"/>
+    </logger>
+
 </configuration>
