@@ -18,13 +18,16 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TodoMonitorTask.class);
 
+    private static final long EXAMPLE_CACHE_REFRESH_RATE = 10000L;
+
     private volatile boolean monitoring;
 
+    //TODO: Investigate Autowiring issue
     @Autowired
     private TodoCacheManager todoCacheManager;
-
     @Resource(name = "cacheRefreshRate")
     private Long cacheRefreshRate;
+
 
     public TodoMonitorTask(boolean shouldStart) {
         this.monitoring = shouldStart;
@@ -32,16 +35,26 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
 
     @Override
     public void run() {
+        long lastRefresh = 0;
         while (monitoring) {
+            /**
+             * Put application logic here for monitoring!
+             *
+             * TODO: There is autowiring dependency issue fix required; see todoCacheManager!!
+             */
             try {
-
-                /* Sleep for 10 Minutes before applying a cache refresh */
-                Thread.sleep(cacheRefreshRate);
-                todoCacheManager.invalidated();
+                Thread.sleep(2000L);
+                System.out.println("Monitoring......");
+                if (System.currentTimeMillis() - lastRefresh > EXAMPLE_CACHE_REFRESH_RATE) {
+                    System.out.println("Schedule Triggered, Applying Cache Refresh!...");
+                    /**
+                     * TODO: Apply cache invalidation logic here
+                     */
+                    lastRefresh = System.currentTimeMillis();
+                }
 
             } catch (InterruptedException e) {
-                LOGGER.error("ERROR", e);
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
