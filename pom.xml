@@ -29,29 +29,19 @@
                 </configuration>
             </plugin>
 
+
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/extra-resources</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/non-packaged-resources</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <mainClass>org.adani.example.Application</mainClass>
+                </configuration>
             </plugin>
+
+
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -59,7 +49,11 @@
                     <include>**/*.xml</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
         </resources>
+
     </build>
 
     <parent>

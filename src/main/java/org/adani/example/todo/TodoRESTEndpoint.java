@@ -6,9 +6,7 @@ import org.springframework.http.ResponseEntity;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-/**
- * Service denoted by the path: localhost:9000/example
- */
+/* Service denoted by the path: localhost:9000/example */
 @Path("/example")
 @Consumes({"application/json"})
 @Produces({"application/json"})

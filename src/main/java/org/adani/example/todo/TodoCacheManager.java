@@ -18,6 +18,7 @@ public class TodoCacheManager {
     private final Executor executor;
     private final TodoMonitorTask todoMonitorTask;
     private volatile Map<Long, Todo> cache;
+
     @Autowired
     private TodoRestClient restClient;
 

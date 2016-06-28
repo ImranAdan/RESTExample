@@ -52,8 +52,7 @@ public class TodoRESTEndpointTest {
 
     @Test
     public void testGetTodoById() {
-        final Response response = ep.getById(4);
-
+        final Response response = ep.getById(3);
         assertThat(response.getStatus(), anyOf(equalTo(200), equalTo(201)));
     }
 

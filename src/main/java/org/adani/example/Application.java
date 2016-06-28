@@ -7,9 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Simple CXF JAX-RS Example
- *
  */
-
 public class Application {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);
@@ -18,5 +16,4 @@ public class Application {
         LOGGER.info("STARTING JAX-RS SERVER THROUGH APPLICATION CONTEXT: SPRING!");
         new ClassPathXmlApplicationContext("application-context.xml");
     }
-
 }

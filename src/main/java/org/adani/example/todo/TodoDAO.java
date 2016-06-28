@@ -1,7 +1,6 @@
 package org.adani.example.todo;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,8 +14,11 @@ public class TodoDAO {
 
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TodoDAO.class);
 
-    @Autowired
-    DataSource dataSource;
+    final DataSource dataSource; //TODO: investigate autowiring issue
+
+    public TodoDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Todo fetchWithToDoId(long id) {
         return new JdbcTemplate(dataSource).queryForObject("SELECT * FROM PUBLIC.TODO WHERE todo_id = ?", new Object[]{id}, getRowMapper());

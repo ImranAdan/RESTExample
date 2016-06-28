@@ -3,6 +3,10 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- quick fix!!, this should not be here but in the root context file -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:app.properties"/>
+    </bean>
 
     <bean id="httpMessageConvert" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
@@ -18,8 +22,9 @@
         <property name="restTemplate" ref="restTemplate"/>
     </bean>
 
-
-    <bean id="todoDAO" class="org.adani.example.todo.TodoDAO"/>
+    <bean id="todoDAO" class="org.adani.example.todo.TodoDAO">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
 
     <bean id="todoCacheManager" class="org.adani.example.todo.TodoCacheManager">
         <property name="restClient" ref="restClient"/>
