@@ -15,10 +15,10 @@ The following project is intended to solve this type of problem and provide a pr
 * Local Caching of fetched entry, thread safe. We separate the task of fetching external data and serving that through our endpoints. Different threads will be responsible for achieving this.  
 * Expose locally cached data through a RESTful interface. This a JAX-RS endpoint. 
 
-### Requirements
+# Requirements
  - Maven, Build + Dependency Management
 
-### Example Run
+# Example Run
 Using the maven exec plugin, we can start our server as follows: 
 
 ```sh
