@@ -5,13 +5,15 @@ Template for Apache CXF + Spring RESTful Based Project.
 
 # Background & Description
 
-It is common requirements nowadays that internal systems software developers build within organisations need retrieve information from external sources outside the organization for internal processing purposes. A common method of retrieving such data is through the use of Web Services; where the REST approach is the preferred method nowadays. 
+It is common requirements nowadays that internal systems software developers build within organisations need retrieve information from external sources outside the organization for internal processing purposes.
+ 
+A common method of retrieving such data is through the use of Web Services; where the REST approach is the preferred method nowadays. 
 
 The following project is intended to solve this type of problem and provide a project template the provides the following out of the box: 
 
 * Connects to External API JSONPlaceholder, which is a fake online REST API for Testing (Integration) and Prototyping, to retrieve some external values. 
 * Save the entry within our own internal database.
-* Local Caching of fetched entry.
+* Local Caching of fetched entry, thread safe. 
 * Expose locally cached data through a RESTful interface.
 
 ### Requirements
@@ -43,8 +45,3 @@ http://localhost:9000/example/todos/1
 ```
 
 Compare that with what the fake mock API provides @ http://jsonplaceholder.typicode.com/todos/1 
-
-
-# Concurrency
-
-If you require concurrency then check the thread safe version of the project @ https://github.com/ImranAdan/ConcurrentRESTExample

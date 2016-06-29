@@ -18,10 +18,10 @@ public class TodoRESTEndpoint {
     public void initialiseService() {
         todoCacheManager.startMonitor();
     }
-
     @GET
     @Path("/todos/{id}")
     public Response getById(@PathParam("id") long id) {
+
         final ResponseEntity<Todo> entity = todoCacheManager.getById(id);
         return asResponse(entity);
     }

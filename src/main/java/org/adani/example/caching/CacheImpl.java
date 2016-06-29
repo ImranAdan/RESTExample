@@ -5,12 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO: No reason to build own cache use ConcurrentCache
- * e.g. see spring/apache projects
+ * TODO: No reason to build own cache use a provided
+ * ConcurrentCache implementation * e.g. see spring/apache projects
  */
-public class CacheManager<K, V> implements Cache<K, V> {
+public class CacheImpl<K, V> implements Cache<K, V> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CacheManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CacheImpl.class);
 
 
     public V get(K key) {

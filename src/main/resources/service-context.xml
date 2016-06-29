@@ -8,7 +8,7 @@
         <import resource="classpath:org/adani/example/myOtherPacgake/config.xml"/>
      -->
 
-    <import resource="classpath:org/adani/example/todo/config.xml"/>
+    <import resource="classpath:org/adani/example/domain/config.xml"/>
 
     <!-- Add additional service endpoints here, these will be autowired into our JAX-RS server, see application-context.xml -->
     <bean id="serviceList" class="java.util.ArrayList">
