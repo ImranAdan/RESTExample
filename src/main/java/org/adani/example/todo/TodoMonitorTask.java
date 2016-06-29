@@ -44,9 +44,9 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
              */
             try {
                 Thread.sleep(2000L);
-                System.out.println("Monitoring......");
+                System.out.println("Background  monitoring task ......");
                 if (System.currentTimeMillis() - lastRefresh > EXAMPLE_CACHE_REFRESH_RATE) {
-                    System.out.println("Schedule Triggered, Applying Cache Refresh!...");
+                    System.out.println("Schedule Triggered!!!!, Applying Cache Refresh!...");
                     /**
                      * TODO: Apply cache invalidation logic here
                      */
