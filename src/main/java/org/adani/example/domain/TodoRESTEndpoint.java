@@ -1,4 +1,4 @@
-package org.adani.example.todo;
+package org.adani.example.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

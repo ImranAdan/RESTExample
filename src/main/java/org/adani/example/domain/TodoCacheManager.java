@@ -1,4 +1,4 @@
-package org.adani.example.todo;
+package org.adani.example.domain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

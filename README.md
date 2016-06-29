@@ -1,20 +1,23 @@
 # RESTful API using Spring and Apache CXF
 
-Template for Apache CXF + Spring REST Based Project. 
+Template for Apache CXF + Spring RESTful Based Project. 
 
-This project makes use of JSONPlaceholder which is a fake online REST API for Testing and Prototyping. In this project we gather data from the mock REST API and stored into a cache and then into a db. 
+# Background & Description
 
-We expose that data through a JAXRS service endpoint.
+It is common requirements nowadays that internal systems software developers build within organisations need retrieve information from external sources outside the organization for internal processing purposes. A common method of retrieving such data is through the use of Web Services; where the REST approach is the preferred method nowadays. 
 
-We also present a background task that runs in the background and causes a trigger on a given interval. 
+The following project is intended to solve this type of problem and provide a project template the provides the following out of the box: 
 
-### JSONPlaceholder
-http://jsonplaceholder.typicode.com/
+* Connects to JSONPlaceholder, which is a fake online REST API for Testing (Integration) and Prototyping, to retrieve some external values. 
+* Save the entry within our own internal database
+* Local Caching
+* Expose locally cached data through a RESTful interface, JAXRS service endpoint.
 
 ### Requirements
- - Maven, Build + Dependecy Management
+ - Maven, Build + Dependency Management
+
 ### Example Run
-Using the maven exec plugin we can start the our server as follows: 
+Using the maven exec plugin, we can start our server as follows: 
 
 ```sh
 $ mvn exec:java -Dexec.mainClass="org.adani.example.Application"
@@ -42,4 +45,4 @@ Compare that with what the fake mock API provides @ http://jsonplaceholder.typic
 
 
 ### TODO
-Better header descriptions!
+Better header descriptions on retruned values. 

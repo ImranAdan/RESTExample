@@ -1,4 +1,4 @@
-package org.adani.example.todo;
+package org.adani.example.domain;
 
 import com.google.gson.Gson;
 import org.junit.Before;

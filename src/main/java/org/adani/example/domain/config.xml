@@ -17,21 +17,21 @@
         </property>
     </bean>
 
-    <bean id="restClient" class="org.adani.example.todo.TodoRestClient">
+    <bean id="restClient" class="org.adani.example.domain.TodoRestClient">
         <constructor-arg value="http://jsonplaceholder.typicode.com/todos"/>
         <property name="restTemplate" ref="restTemplate"/>
     </bean>
 
-    <bean id="todoDAO" class="org.adani.example.todo.TodoDAO">
+    <bean id="todoDAO" class="org.adani.example.domain.TodoDAO">
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="todoCacheManager" class="org.adani.example.todo.TodoCacheManager">
+    <bean id="todoCacheManager" class="org.adani.example.domain.TodoCacheManager">
         <property name="restClient" ref="restClient"/>
         <property name="todoDAO" ref="todoDAO"/>
     </bean>
 
-    <bean id="TodoRestEndpoint" class="org.adani.example.todo.TodoRESTEndpoint" init-method="initialiseService"
+    <bean id="TodoRestEndpoint" class="org.adani.example.domain.TodoRESTEndpoint" init-method="initialiseService"
           destroy-method="tearDownService">
         <property name="todoCacheManager" ref="todoCacheManager"/>
     </bean>

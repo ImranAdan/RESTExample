@@ -1,4 +1,4 @@
-package org.adani.example.todo;
+package org.adani.example.domain;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
