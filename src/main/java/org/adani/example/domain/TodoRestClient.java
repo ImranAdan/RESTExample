@@ -8,13 +8,15 @@ import java.util.Collections;
 
 public class TodoRestClient {
 
-    private final String serviceUrl;
+    @Autowired
+    RestTemplate restTemplate;
 
     @Autowired
-    private RestTemplate restTemplate;
+    String serviceUrl;
 
-    public TodoRestClient(String serviceUrl) {
-        this.serviceUrl = serviceUrl;
+    public ResponseEntity<Todo> post(Todo item) {
+        ResponseEntity<Todo> createdEntity = postTodoItem(item);
+        return createdEntity;
     }
 
     public ResponseEntity<Todo> getById(long id) {
@@ -22,15 +24,9 @@ public class TodoRestClient {
         return todoById;
     }
 
-    // Apply paging for large result set
     public ResponseEntity<Todo[]> getAll() {
         ResponseEntity<Todo[]> allTodos = all();
         return allTodos;
-    }
-
-    public ResponseEntity<Todo> post(Todo item) {
-        ResponseEntity<Todo> createdEntity = create(item);
-        return createdEntity;
     }
 
     private ResponseEntity<Todo> getTodoById(long id) {
@@ -43,12 +39,8 @@ public class TodoRestClient {
         return responseEntity;
     }
 
-    private ResponseEntity<Todo> create(Todo item) {
+    private ResponseEntity<Todo> postTodoItem(Todo item) {
         ResponseEntity<Todo> response = restTemplate.postForEntity(serviceUrl, item, Todo.class);
         return response;
-    }
-
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
     }
 }

@@ -3,37 +3,26 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- quick fix!!, this should not be here but in the root context file -->
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:app.properties"/>
+
+    <bean id="httpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+
+    <bean id="serviceUrl" class="java.lang.String">
+        <constructor-arg value="http://jsonplaceholder.typicode.com/todos"/>
     </bean>
 
-    <bean id="httpMessageConvert" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate" autowire="byName">
         <property name="messageConverters">
             <list>
-                <ref bean="httpMessageConvert"/>
+                <ref bean="httpMessageConverter"/>
             </list>
         </property>
     </bean>
 
-    <bean id="restClient" class="org.adani.example.domain.TodoRestClient">
-        <constructor-arg value="http://jsonplaceholder.typicode.com/todos"/>
-        <property name="restTemplate" ref="restTemplate"/>
-    </bean>
-
-    <bean id="todoDAO" class="org.adani.example.domain.TodoDAO">
-        <constructor-arg name="dataSource" ref="dataSource"/>
-    </bean>
-
-    <bean id="todoCacheManager" class="org.adani.example.domain.TodoCacheManager">
-        <property name="restClient" ref="restClient"/>
-        <property name="todoDAO" ref="todoDAO"/>
-    </bean>
-
+    <bean id="restClient" class="org.adani.example.domain.TodoRestClient" autowire="byName"/>
+    <bean id="todoDAO" class="org.adani.example.domain.TodoDAO" autowire="byName"/>
+    <bean id="todoCacheManager" class="org.adani.example.domain.TodoCacheManager" autowire="byName"/>
     <bean id="TodoRestEndpoint" class="org.adani.example.domain.TodoRESTEndpoint" init-method="initialiseService"
-          destroy-method="tearDownService">
-        <property name="todoCacheManager" ref="todoCacheManager"/>
-    </bean>
+          autowire="byName"/>
 
 </beans>

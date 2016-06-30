@@ -24,7 +24,9 @@
     <!-- Database Context -->
     <import resource="database-context.xml"/>
 
+
     <!-- COULD EVEN TAKE THIS OUT into a server-context.xml for finer control -->
+
 
     <!-- CXF- JAXRS - Server Context [localhost] -->
     <jaxrs:server id="restServer" address="http://localhost:9000/">
