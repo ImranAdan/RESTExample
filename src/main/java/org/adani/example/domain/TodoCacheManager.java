@@ -2,7 +2,6 @@ package org.adani.example.domain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,14 +16,20 @@ public class TodoCacheManager {
     private final Executor executor;
     private Map<Long, Todo> cache;
 
-    public TodoCacheManager() {
+    private TodoCacheManager() {
         executor = Executors.newSingleThreadExecutor();
         cache = new ConcurrentHashMap<>();
     }
 
-    public Todo put(Todo item) {
+    public synchronized Todo put(Todo item) {
         final Todo cached = insert(item);
+        LOGGER.info("CACHED: " + cached.toString());
         return cached;
+    }
+
+    public synchronized Todo get(long key) {
+        Todo entry = cache.get(key);
+        return entry;
     }
 
     private Todo insert(Todo item) {
@@ -35,39 +40,8 @@ public class TodoCacheManager {
         return current;
     }
 
-    private Todo get(long key) {
-        Todo entry = cache.get(key);
-        return entry;
-    }
 
-    private boolean expired(Todo todo) {
-        return System.currentTimeMillis() - todo.getCreated().getTime() > CACHE_REFRESH_RATE;
-    }
-
-    public ResponseEntity<Todo[]> getAll() {
-        ResponseEntity<Todo[]> responseEntity = restClient.getAll();
-        return responseEntity;
-    }
-
-    public ResponseEntity<Todo> create(Todo item) {
-        ResponseEntity<Todo> responseEntity = restClient.post(item);
-        return responseEntity;
-    }
-
-    // Apply Cache Refresh
-    public void invalidated() {
-        refreshCache();
-    }
-
-    private void refreshCache() {
-        cache.values().stream().filter(toRefresh -> expired(toRefresh)).forEach(toRefresh -> {
-            Todo refreshedEntity = applyRefresh(toRefresh);
-            LOGGER.info("APPLIED REFRESH ON:\n" + refreshedEntity.toString());
-        });
-    }
-
-    public void startMonitor() {
-        LOGGER.info("STARTING MONITORING THREAD ....");
-        startMonitoring();
+    public void execute() {
+        executor.execute(TodoMonitorTask.getInstance());
     }
 }
