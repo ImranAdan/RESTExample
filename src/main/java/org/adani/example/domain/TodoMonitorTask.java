@@ -2,7 +2,6 @@ package org.adani.example.domain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -12,22 +11,21 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
     private static final Logger LOGGER = LoggerFactory.getLogger(TodoMonitorTask.class);
     private static final Random RAND = new Random();
 
-    @Autowired
-    AtomicBoolean monitoring;
+    private final AtomicBoolean monitoring;
+    private final long fetchIntervalRate;
+    private final TodoRestClient restClient;
+    private final TodoDAO todoDAO;
+    private final TodoCacheManager todoCacheManager;
 
-    @Autowired
-    TodoCacheManager todoCacheManager;
+    public TodoMonitorTask(long fetchIntervalRate, TodoRestClient restClient, TodoDAO todoDAO, TodoCacheManager todoCacheManager) {
+        this.restClient = restClient;
+        this.todoDAO = todoDAO;
+        this.todoCacheManager = todoCacheManager;
+        monitoring = new AtomicBoolean(true);
+        this.fetchIntervalRate = fetchIntervalRate;
+    }
 
-    @Autowired
-    Long fetchIntervalRate;
-
-    @Autowired
-    TodoRestClient restClient;
-
-    @Autowired
-    TodoDAO todoDAO;
-
-    public static int generateRandomBetween(int min, int max) {
+    private static int generateRandomBetween(int min, int max) {
         return RAND.nextInt(max - min + 1) + min;
     }
 
@@ -35,9 +33,14 @@ public class TodoMonitorTask implements Runnable, AutoCloseable {
     public void run() {
         long lastRefresh = 0;
         while (monitoring.get()) {
-            if (fetchRequired(lastRefresh)) {
 
-                Todo externallyFetchedItem = restClient.getById(generateRandomBetween(1, 200));
+            LOGGER.info("MONITORING....");
+
+            if (fetchRequired(lastRefresh)) {
+                long id = generateRandomBetween(1, 200);
+                LOGGER.info("FETCHING NEXT RESULT = " + id);
+
+                Todo externallyFetchedItem = restClient.getById(id);
                 LOGGER.info("FETCHED EXTERNAL RESOURCE -> " + externallyFetchedItem.toString());
 
                 final Todo record = todoDAO.create(externallyFetchedItem);

@@ -45,20 +45,9 @@ public class TodoRESTEndpointTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
-        final Response response = ep.postToDo(todoItem);
-        assertThat(response.getStatus(), anyOf(equalTo(200), equalTo(201)));
-    }
-
-    @Test
     public void testGetTodoById() {
         final Response response = ep.getById(3);
         assertThat(response.getStatus(), anyOf(equalTo(200), equalTo(201)));
     }
 
-    @Test
-    public void testGetAll() {
-        final Response response = ep.getAll();
-        assertThat(response.getStatus(), anyOf(equalTo(200), equalTo(201)));
-    }
 }

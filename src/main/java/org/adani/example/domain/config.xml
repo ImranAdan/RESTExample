@@ -18,14 +18,28 @@
         </property>
     </bean>
 
-    <bean id="restClient" class="org.adani.example.domain.TodoRestClient" autowire="byName"/>
+    <bean id="restClient" class="org.adani.example.domain.TodoRestClient">
+        <constructor-arg index="0" ref="restTemplate"/>
+        <constructor-arg index="1" ref="serviceUrl"/>
+    </bean>
+
 
     <bean id="todoDAO" class="org.adani.example.domain.TodoDAO" autowire="byName"/>
+    <bean id="todoCacheManager" class="org.adani.example.domain.TodoCacheManager" autowire="byName"/>
 
-    <bean id="todoCacheManager" class="org.adani.example.domain.TodoCacheManager" autowire="byName"
-          init-method="execute"/>
+    <bean id="externalFetchTask" class="org.adani.example.domain.TodoMonitorTask" autowire="byName">
+        <constructor-arg name="fetchIntervalRate" value="20000"/>
+        <constructor-arg name="restClient" ref="restClient"/>
+        <constructor-arg name="todoDAO" ref="todoDAO"/>
+        <constructor-arg name="todoCacheManager" ref="todoCacheManager"/>
 
-    <bean id="TodoRestEndpoint" class="org.adani.example.domain.TodoRESTEndpoint" init-method="initialiseService"
-          autowire="byName"/>
+    </bean>
+
+    <bean id="todoTaskManager" class="org.adani.example.domain.TodoTaskManager" init-method="execute">
+        <constructor-arg name="task" ref="externalFetchTask"/>
+    </bean>
+
+    <bean id="TodoRestEndpoint" class="org.adani.example.domain.TodoRESTEndpoint" autowire="byName"/>
+
 
 </beans>

@@ -5,24 +5,21 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 
 public class TodoCacheManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TodoCacheManager.class);
 
-    private final Executor executor;
-    private Map<Long, Todo> cache;
+    private final Map<Long, Todo> cache;
 
-    private TodoCacheManager() {
-        executor = Executors.newSingleThreadExecutor();
+    public TodoCacheManager() {
         cache = new ConcurrentHashMap<>();
     }
 
+
     public synchronized Todo put(Todo item) {
-        final Todo cached = insert(item);
+        final Todo cached = cacheEntry(item);
         LOGGER.info("CACHED: " + cached.toString());
         return cached;
     }
@@ -32,16 +29,11 @@ public class TodoCacheManager {
         return entry;
     }
 
-    private Todo insert(Todo item) {
+    private Todo cacheEntry(Todo item) {
         Todo previous = cache.put(item.getId(), item);
         Todo current = cache.get(item.getId());
         LOGGER.info("REMOVED: " + previous);
         LOGGER.info("ADDED: " + current);
         return current;
-    }
-
-
-    public void execute() {
-        executor.execute(TodoMonitorTask.getInstance());
     }
 }
