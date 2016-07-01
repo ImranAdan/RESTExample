@@ -1,4 +1,4 @@
-# RESTful API using Spring and Apache CXF
+# RESTful API using Spring and Apache CXF [![Build Status](https://travis-ci.org/ImranAdan/RESTExample.svg?branch=master)](https://travis-ci.org/ImranAdan/RESTExample)
 
 Template for Apache CXF + Spring RESTful Based Project. 
 
