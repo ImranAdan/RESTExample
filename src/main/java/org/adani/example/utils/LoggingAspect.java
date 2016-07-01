@@ -32,7 +32,7 @@ public class LoggingAspect {
 
     @AfterThrowing(pointcut = ("execution(* org.adani.example..*..*(..))"), throwing = "ex")
     protected void onExceptionThrown(JoinPoint jp, Throwable ex) {
-        String fault = "EXCEPTION [\n" + ex.getMessage() + "\n]";
+        String fault = "EXCEPTION [" + ex.getMessage() + "]\n";
         LOGGER.info(fault);
         String args = getJointPointArgs(jp);
         String actionMessage = fault + "\n" + "EXIT: [" + jp.getSignature().getDeclaringTypeName() + "::" + jp.getSignature().getName() + "( " + args + " )]";

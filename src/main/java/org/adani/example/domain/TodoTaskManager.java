@@ -1,6 +1,7 @@
 package org.adani.example.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -24,8 +25,8 @@ public class TodoTaskManager {
         executor.execute(task);
     }
 
-    public Todo get(long id) {
-        Todo cachedEntry = todoCacheManager.get(id);
+    public ResponseEntity<Todo> get(long id) {
+        ResponseEntity<Todo> cachedEntry = todoCacheManager.get(id);
         return cachedEntry;
     }
 }
