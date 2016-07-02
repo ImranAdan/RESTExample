@@ -6,10 +6,6 @@
     <bean id="httpMessageConverter"
           class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
 
-    <bean id="serviceUrl" class="java.lang.String">
-        <constructor-arg value="http://jsonplaceholder.typicode.com/todos"/>
-    </bean>
-
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate" autowire="byName">
         <property name="messageConverters">
             <list>
@@ -20,7 +16,7 @@
 
     <bean id="restClient" class="org.adani.example.domain.TodoRestClient">
         <constructor-arg index="0" ref="restTemplate"/>
-        <constructor-arg index="1" ref="serviceUrl"/>
+        <constructor-arg index="1" value="http://jsonplaceholder.typicode.com/todos"/>
     </bean>
 
 
@@ -32,14 +28,15 @@
         <constructor-arg name="restClient" ref="restClient"/>
         <constructor-arg name="todoDAO" ref="todoDAO"/>
         <constructor-arg name="todoCacheManager" ref="todoCacheManager"/>
-
     </bean>
 
-    <bean id="todoTaskManager" class="org.adani.example.domain.TodoTaskManager" init-method="execute">
+    <bean id="todoTaskManager" class="org.adani.example.domain.TodoTaskManager" depends-on="externalFetchTask"
+          init-method="execute">
         <constructor-arg name="task" ref="externalFetchTask"/>
     </bean>
 
-    <bean id="TodoRestEndpoint" class="org.adani.example.domain.TodoRESTEndpoint" autowire="byName"/>
+    <bean id="TodoRestEndpoint" class="org.adani.example.domain.TodoRESTEndpoint" autowire="byName"
+          depends-on="todoTaskManager"/>
 
 
 </beans>
